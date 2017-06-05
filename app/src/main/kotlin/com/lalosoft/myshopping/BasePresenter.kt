@@ -2,23 +2,23 @@ package com.lalosoft.myshopping
 
 abstract class BasePresenter(val view: BaseView) {
 
-    fun onCreate() {
+    open fun onCreate() {
         // to be implemented by sub-classes
     }
 
-    fun onStart() {
+    open fun onStart() {
         // to be implemented by sub-classes
     }
 
-    fun onResume() {
+    open fun onResume() {
         // to be implemented by sub-classes
     }
 
-    fun onPause() {
+    open fun onPause() {
         // to be implemented by sub-classes
     }
 
-    fun onStop() {
+    open fun onStop() {
         // to be implemented by sub-classes
     }
 

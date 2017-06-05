@@ -38,7 +38,6 @@ object Api {
                 } else {
                     ApiResponse<String>(false)
                 }
-
             }
         })
     }

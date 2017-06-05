@@ -16,18 +16,25 @@ class LoginActivity : BaseActivity<LoginPresenter>(), LoginView {
         super.onCreate(savedInstanceState)
 
         login_button.setOnClickListener {
-            val email = username_text_input.text.toString()
+            val email = email_text_input.text.toString()
             val password = password_text_input.text.toString()
             presenter?.login(email, password)
         }
+
+        remember_login_cb.setOnCheckedChangeListener(presenter)
     }
 
-    override fun showLoginNotValidError() {
-        toast("Login not valid")
+    override fun clearErrors() {
+        email_text_input.error = null
+        password_text_input.error = null
+    }
+
+    override fun showEmailNotValidError() {
+        email_text_input.error = "Login is not valid"
     }
 
     override fun showPassNotValidError() {
-        toast("Pass does not have valid format")
+        password_text_input.error = "Password is not valid"
     }
 
     override fun showLoginSuccess() {
