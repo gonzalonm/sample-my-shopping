@@ -3,13 +3,13 @@ package com.lalosoft.myshopping.login
 import android.widget.CompoundButton
 import com.lalosoft.myshopping.App
 import com.lalosoft.myshopping.BasePresenter
-import com.lalosoft.myshopping.data.LoginCallback
-import com.lalosoft.myshopping.data.LoginService
+import com.lalosoft.myshopping.data.api.LoginApiService
+import com.lalosoft.myshopping.data.api.LoginCallback
 import com.lalosoft.myshopping.data.isEmail
 
-class LoginPresenter(view: LoginView) : BasePresenter(view), CompoundButton.OnCheckedChangeListener {
+class LoginPresenter(val view: LoginView) : BasePresenter(), CompoundButton.OnCheckedChangeListener {
 
-    val loginService = LoginService()
+    val loginService = LoginApiService()
     var rememberLogin = false
 
     override fun onCreate() {

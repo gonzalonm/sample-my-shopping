@@ -1,14 +1,13 @@
-package com.lalosoft.myshopping.data
+package com.lalosoft.myshopping.data.api
 
-import org.json.JSONObject
+import com.lalosoft.myshopping.data.api.Api.doPostRequest
 
-class LoginService(val api: Api = Api) {
+class LoginApiService : BaseApiService() {
 
-    val HOST = "http://private-2906ba-myshopping.apiary-mock.com"
     val LOGIN_URL = "$HOST/login"
 
     fun login(username: String, password: String, callback: LoginCallback) {
-        api.doPostRequest(LOGIN_URL, buildJsonBody(username, password), { apiResponse ->
+        doPostRequest(LOGIN_URL, buildJsonBody(username, password), { apiResponse ->
             if (apiResponse.success) {
                 callback.onSuccess()
             } else {
@@ -22,7 +21,7 @@ class LoginService(val api: Api = Api) {
     }
 
     private fun buildJsonBody(username: String, password: String): String {
-        val jsonObject = JSONObject()
+        val jsonObject = org.json.JSONObject()
         jsonObject.put("username", username)
         jsonObject.put("password", password)
         return jsonObject.toString()

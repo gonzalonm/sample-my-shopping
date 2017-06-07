@@ -4,4 +4,7 @@
     <string name="password">Password</string>
     <string name="login">Login</string>
     <string name="remember_login">Remember Login</string>
+    <string name="login_is_not_valid">Login is not valid</string>
+    <string name="password_is_not_valid">Password is not valid</string>
+    <string name="login_do_not_match">Username or password do not match</string>
 </resources>

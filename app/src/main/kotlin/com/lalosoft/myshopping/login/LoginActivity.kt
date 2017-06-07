@@ -1,9 +1,12 @@
 package com.lalosoft.myshopping.login
 
+import android.content.Intent
 import android.os.Bundle
 import com.lalosoft.myshopping.BaseActivity
 import com.lalosoft.myshopping.R
+import com.lalosoft.myshopping.data.callTo
 import com.lalosoft.myshopping.data.toast
+import com.lalosoft.myshopping.home.HomeActivity
 import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : BaseActivity<LoginPresenter>(), LoginView {
@@ -30,19 +33,19 @@ class LoginActivity : BaseActivity<LoginPresenter>(), LoginView {
     }
 
     override fun showEmailNotValidError() {
-        email_text_input.error = "Login is not valid"
+        email_text_input.error = getString(R.string.login_is_not_valid)
     }
 
     override fun showPassNotValidError() {
-        password_text_input.error = "Password is not valid"
+        password_text_input.error = getString(R.string.password_is_not_valid)
     }
 
     override fun showLoginSuccess() {
-        toast("Login success!")
+        callTo(HomeActivity::class.java)
     }
 
     override fun showUsernamePasswordNotMatchError() {
-        toast("Username or password do not match")
+        toast(getString(R.string.login_do_not_match))
     }
 
     override fun showError(error: String) {

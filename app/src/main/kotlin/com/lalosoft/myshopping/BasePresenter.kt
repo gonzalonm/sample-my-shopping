@@ -1,6 +1,6 @@
 package com.lalosoft.myshopping
 
-abstract class BasePresenter(val view: BaseView) {
+abstract class BasePresenter {
 
     open fun onCreate() {
         // to be implemented by sub-classes
