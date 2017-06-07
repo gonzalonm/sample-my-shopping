@@ -5,6 +5,7 @@ import com.lalosoft.myshopping.domain.Item
 class ShoppingItemApiService : BaseApiService() {
 
     fun getAllItems(callback: ShoppingItemCallback) {
+        // TODO: move this data to backend
         callback.retrieveItemsSuccess(listOf(
                 Item("iPad", "", "http://lorempixel.com/640/480/technics/1/"),
                 Item("DJ Console", "", "http://lorempixel.com/640/480/technics/2/"),
