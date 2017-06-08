@@ -1,16 +1,16 @@
 package com.lalosoft.myshopping.home
 
 import com.lalosoft.myshopping.BasePresenter
-import com.lalosoft.myshopping.data.api.ShoppingItemApiService
-import com.lalosoft.myshopping.data.api.ShoppingItemCallback
+import com.lalosoft.myshopping.data.repository.CloudItemRepository
 import com.lalosoft.myshopping.domain.Item
+import com.lalosoft.myshopping.domain.repository.ItemDataCallback
 
 class HomePresenter(val view: HomeView) : BasePresenter() {
 
-    val service = ShoppingItemApiService()
+    val service = CloudItemRepository()
 
     override fun onStart() {
-        service.getAllItems(object : ShoppingItemCallback{
+        service.getAllItems("1234", object : ItemDataCallback {
             override fun retrieveItemsSuccess(list: List<Item>) {
                 if (list.isEmpty()) {
                     view.renderEmpty()
@@ -20,7 +20,7 @@ class HomePresenter(val view: HomeView) : BasePresenter() {
             }
 
             override fun retrieveItemsFailure() {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                view.renderError()
             }
         })
     }

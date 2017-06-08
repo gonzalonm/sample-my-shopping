@@ -1,15 +1,18 @@
-package com.lalosoft.myshopping.data.api
+package com.lalosoft.myshopping.data.repository
 
-import com.lalosoft.myshopping.data.api.Api.doPostRequest
+import com.lalosoft.myshopping.data.api.Api
+import com.lalosoft.myshopping.domain.User
+import com.lalosoft.myshopping.domain.repository.UserDataCallback
+import com.lalosoft.myshopping.domain.repository.UserRepository
 
-class LoginApiService : BaseApiService() {
+class CloudUserRepository : BaseCloudRepository(), UserRepository {
 
     val LOGIN_URL = "$HOST/login"
 
-    fun login(username: String, password: String, callback: LoginCallback) {
-        doPostRequest(LOGIN_URL, buildJsonBody(username, password), { apiResponse ->
+    override fun login(user: User, callback: UserDataCallback) {
+        Api.doPostRequest(LOGIN_URL, buildJsonBody(user.username, user.password), { apiResponse ->
             if (apiResponse.success) {
-                callback.onSuccess()
+                callback.onLoginSuccess()
             } else {
                 if (apiResponse.error.isEmpty()) {
                     callback.onUsernamePasswordNotMatch()
@@ -26,10 +29,4 @@ class LoginApiService : BaseApiService() {
         jsonObject.put("password", password)
         return jsonObject.toString()
     }
-}
-
-interface LoginCallback {
-    fun onSuccess()
-    fun onUsernamePasswordNotMatch()
-    fun onError(error: String)
 }

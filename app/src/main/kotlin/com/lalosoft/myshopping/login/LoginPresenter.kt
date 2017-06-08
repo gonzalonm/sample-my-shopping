@@ -3,13 +3,14 @@ package com.lalosoft.myshopping.login
 import android.widget.CompoundButton
 import com.lalosoft.myshopping.App
 import com.lalosoft.myshopping.BasePresenter
-import com.lalosoft.myshopping.data.api.LoginApiService
-import com.lalosoft.myshopping.data.api.LoginCallback
 import com.lalosoft.myshopping.data.isEmail
+import com.lalosoft.myshopping.data.repository.CloudUserRepository
+import com.lalosoft.myshopping.domain.User
+import com.lalosoft.myshopping.domain.repository.UserDataCallback
 
 class LoginPresenter(val view: LoginView) : BasePresenter(), CompoundButton.OnCheckedChangeListener {
 
-    val loginService = LoginApiService()
+    val userRepository = CloudUserRepository()
     var rememberLogin = false
 
     override fun onCreate() {
@@ -26,8 +27,8 @@ class LoginPresenter(val view: LoginView) : BasePresenter(), CompoundButton.OnCh
         } else if (password.isEmpty() || password.length < 3) {
             view.showPassNotValidError()
         } else {
-            loginService.login(email, password, object : LoginCallback {
-                override fun onSuccess() {
+            userRepository.login(User(email, password), object : UserDataCallback {
+                override fun onLoginSuccess() {
                     App.get().rememberLogin = rememberLogin
                     view.showLoginSuccess()
                 }
