@@ -3,11 +3,17 @@ package com.lalosoft.myshopping.domain.repository
 import com.lalosoft.myshopping.domain.User
 
 interface UserRepository {
-    fun login(user: User, callback: UserDataCallback)
+    fun login(user: User, callback: LoginUserCallback)
+    fun logout(token: String, callback: LogoutUserCallback)
 }
 
-interface UserDataCallback {
-    fun onLoginSuccess()
+interface LogoutUserCallback {
+    fun onLogoutSuccess()
+    fun onLogoutError(error: String)
+}
+
+interface LoginUserCallback {
+    fun onLoginSuccess(token: String)
     fun onUsernamePasswordNotMatch()
-    fun onError(error: String)
+    fun onLoginError(error: String)
 }

@@ -27,7 +27,7 @@ class CloudItemRepository : BaseCloudRepository(), ItemRepository {
         var pos = 0
         while (pos < jsonArray.length()) {
             val jsonItem = jsonArray.getJSONObject(pos)
-            list.add(Item(jsonItem.getString("name"), jsonItem.getInt("price"), jsonItem.getString("image")))
+            list.add(Item.fromJson(jsonItem.toString()))
             pos++
         }
         return list

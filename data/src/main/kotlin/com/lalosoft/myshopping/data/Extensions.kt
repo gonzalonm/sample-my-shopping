@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
+import com.lalosoft.myshopping.domain.Item
+import com.lalosoft.myshopping.domain.User
 import com.squareup.picasso.Picasso
 import org.json.JSONObject
 import java.util.regex.Pattern
@@ -23,7 +25,7 @@ fun String.toJson(): JSONObject {
     return JSONObject(this)
 }
 
-fun AppCompatActivity.toast(message: String) {
+fun Activity.toast(message: String) {
     runOnUiThread { Toast.makeText(this, message, Toast.LENGTH_SHORT).show() }
 }
 
@@ -35,4 +37,11 @@ fun ImageView.load(url: String) {
 
 fun Activity.callTo(clazz: Class<out Activity>) {
     startActivity(Intent(this, clazz))
+}
+
+fun User.toJson() : String {
+    val jsonObject = JSONObject()
+    jsonObject.put("username", username)
+    jsonObject.put("password", password)
+    return jsonObject.toString()
 }

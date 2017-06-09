@@ -1,5 +1,7 @@
 package com.lalosoft.myshopping.home
 
+import android.view.Menu
+import android.view.MenuItem
 import com.lalosoft.myshopping.BaseActivity
 import com.lalosoft.myshopping.R
 import com.lalosoft.myshopping.data.toast
@@ -9,7 +11,7 @@ import kotlinx.android.synthetic.main.activity_home.*
 class HomeActivity : BaseActivity<HomePresenter>(), HomeView {
 
     override fun renderError() {
-        toast("Data could not be retrieved")
+        toast(getString(R.string.render_error))
     }
 
     override fun renderEmpty() {
@@ -23,4 +25,14 @@ class HomeActivity : BaseActivity<HomePresenter>(), HomeView {
     override fun getContentViewID() = R.layout.activity_home
 
     override fun buildPresenter() = HomePresenter(this)
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_home, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if (item?.itemId == R.id.menu_logout) presenter?.logout()
+        return true
+    }
 }

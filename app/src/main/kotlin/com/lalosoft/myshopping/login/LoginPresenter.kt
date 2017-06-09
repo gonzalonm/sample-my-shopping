@@ -6,7 +6,7 @@ import com.lalosoft.myshopping.BasePresenter
 import com.lalosoft.myshopping.data.isEmail
 import com.lalosoft.myshopping.data.repository.CloudUserRepository
 import com.lalosoft.myshopping.domain.User
-import com.lalosoft.myshopping.domain.repository.UserDataCallback
+import com.lalosoft.myshopping.domain.repository.LoginUserCallback
 
 class LoginPresenter(val view: LoginView) : BasePresenter(), CompoundButton.OnCheckedChangeListener {
 
@@ -27,9 +27,10 @@ class LoginPresenter(val view: LoginView) : BasePresenter(), CompoundButton.OnCh
         } else if (password.isEmpty() || password.length < 3) {
             view.showPassNotValidError()
         } else {
-            userRepository.login(User(email, password), object : UserDataCallback {
-                override fun onLoginSuccess() {
+            userRepository.login(User(email, password), object : LoginUserCallback {
+                override fun onLoginSuccess(token: String) {
                     App.get().rememberLogin = rememberLogin
+                    App.get().token = token
                     view.showLoginSuccess()
                 }
 
@@ -37,7 +38,7 @@ class LoginPresenter(val view: LoginView) : BasePresenter(), CompoundButton.OnCh
                     view.showUsernamePasswordNotMatchError()
                 }
 
-                override fun onError(error: String) {
+                override fun onLoginError(error: String) {
                     view.showError(error)
                 }
             })

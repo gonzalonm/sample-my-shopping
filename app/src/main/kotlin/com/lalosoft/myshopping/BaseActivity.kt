@@ -1,5 +1,6 @@
 package com.lalosoft.myshopping
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 
@@ -35,6 +36,12 @@ abstract class BaseActivity<T : BasePresenter> : AppCompatActivity() {
     override fun onStop() {
         super.onStop()
         presenter?.onStop()
+    }
+
+    open fun restartApp() {
+        val intent = baseContext.packageManager.getLaunchIntentForPackage(baseContext.packageName)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        startActivity(intent)
     }
 
 }

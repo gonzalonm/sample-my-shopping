@@ -1,32 +1,40 @@
 package com.lalosoft.myshopping.data.repository
 
 import com.lalosoft.myshopping.data.api.Api
+import com.lalosoft.myshopping.data.toJson
 import com.lalosoft.myshopping.domain.User
-import com.lalosoft.myshopping.domain.repository.UserDataCallback
+import com.lalosoft.myshopping.domain.repository.LoginUserCallback
+import com.lalosoft.myshopping.domain.repository.LogoutUserCallback
 import com.lalosoft.myshopping.domain.repository.UserRepository
 
 class CloudUserRepository : BaseCloudRepository(), UserRepository {
 
     val LOGIN_URL = "$HOST/login"
+    val LOGOUT_URL = "$HOST/logout"
 
-    override fun login(user: User, callback: UserDataCallback) {
-        Api.doPostRequest(LOGIN_URL, buildJsonBody(user.username, user.password), { apiResponse ->
+    override fun login(user: User, callback: LoginUserCallback) {
+        Api.doPostRequest(LOGIN_URL, user.toJson(), { apiResponse ->
             if (apiResponse.success) {
-                callback.onLoginSuccess()
+                val json = apiResponse.content?.toJson()
+                callback.onLoginSuccess(json!!.getString("token"))
             } else {
                 if (apiResponse.error.isEmpty()) {
                     callback.onUsernamePasswordNotMatch()
                 } else {
-                    callback.onError(apiResponse.error)
+                    callback.onLoginError(apiResponse.error)
                 }
             }
         })
     }
 
-    private fun buildJsonBody(username: String, password: String): String {
-        val jsonObject = org.json.JSONObject()
-        jsonObject.put("username", username)
-        jsonObject.put("password", password)
-        return jsonObject.toString()
+    override fun logout(token: String, callback: LogoutUserCallback) {
+        val url = LOGOUT_URL + "/" + token
+        Api.doGetRequest(url, { apiResponse ->
+            if (apiResponse.success) {
+                callback.onLogoutSuccess()
+            } else {
+                callback.onLogoutError(apiResponse.error)
+            }
+        })
     }
 }

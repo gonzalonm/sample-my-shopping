@@ -1,6 +1,9 @@
 package com.lalosoft.myshopping.data.api
 
 import com.lalosoft.myshopping.data.toJson
+import okhttp3.MediaType
+import okhttp3.OkHttpClient
+import okhttp3.Request
 
 object Api {
 
@@ -8,48 +11,48 @@ object Api {
         GET, POST, DELETE, PUT
     }
 
-    val JSON: okhttp3.MediaType? = okhttp3.MediaType.parse("application/json; charset=utf-8")
+    val JSON: MediaType? = MediaType.parse("application/json; charset=utf-8")
 
     class ApiResponse<out T>(val success: Boolean = true, val content: T? = null, val error: String = "")
 
-    fun doGetRequest(url: String, callback: (com.lalosoft.myshopping.data.api.Api.ApiResponse<String>) -> Unit) {
-        com.lalosoft.myshopping.data.api.Api.doRequest(url = url, method = Method.GET, callback = callback)
+    fun doGetRequest(url: String, callback: (ApiResponse<String>) -> Unit) {
+        doRequest(url = url, method = Method.GET, callback = callback)
     }
 
-    fun doPostRequest(url: String, body: String, callback: (com.lalosoft.myshopping.data.api.Api.ApiResponse<String>) -> Unit) {
-        com.lalosoft.myshopping.data.api.Api.doRequest(url, body, Method.POST, callback)
+    fun doPostRequest(url: String, body: String, callback: (ApiResponse<String>) -> Unit) {
+        doRequest(url, body, Method.POST, callback)
     }
 
-    private fun doRequest(url: String, body: String? = null, method: com.lalosoft.myshopping.data.api.Api.Method, callback: (com.lalosoft.myshopping.data.api.Api.ApiResponse<String>) -> Unit) {
-        val client = com.lalosoft.myshopping.data.api.Api.client()
+    private fun doRequest(url: String, body: String? = null, method: Method, callback: (ApiResponse<String>) -> Unit) {
+        val client = client()
 
-        val request = com.lalosoft.myshopping.data.api.Api.resolveMethod(url, method, body)
+        val request = resolveMethod(url, method, body)
 
         client.newCall(request).enqueue(object : okhttp3.Callback {
             override fun onFailure(call: okhttp3.Call?, e: java.io.IOException?) {
-                callback(com.lalosoft.myshopping.data.api.Api.ApiResponse<String>(false, error = e.toString()))
+                callback(ApiResponse<String>(false, error = e.toString()))
             }
 
             override fun onResponse(call: okhttp3.Call?, response: okhttp3.Response?) {
                 val jsonResponse = response?.body()?.string()!!.toJson()
                 if (jsonResponse["result"] == "success") {
-                    callback(com.lalosoft.myshopping.data.api.Api.ApiResponse(content = jsonResponse.toString()))
+                    callback(ApiResponse(content = jsonResponse.toString()))
                 } else {
-                    com.lalosoft.myshopping.data.api.Api.ApiResponse<String>(false)
+                    ApiResponse<String>(false)
                 }
             }
         })
     }
 
-    private fun client() = okhttp3.OkHttpClient()
+    private fun client() = OkHttpClient()
 
-    private fun resolveMethod(url: String, method: com.lalosoft.myshopping.data.api.Api.Method, body: String? = null): okhttp3.Request {
-        val builder = okhttp3.Request.Builder().url(url)
+    private fun resolveMethod(url: String, method: Method, body: String? = null): Request {
+        val builder = Request.Builder().url(url)
         when (method) {
-            com.lalosoft.myshopping.data.api.Api.Method.GET -> return builder.get().build()
-            com.lalosoft.myshopping.data.api.Api.Method.POST -> return builder.post(okhttp3.RequestBody.create(com.lalosoft.myshopping.data.api.Api.JSON, body!!)).build()
-            com.lalosoft.myshopping.data.api.Api.Method.DELETE -> throw TODO("not implemented")
-            com.lalosoft.myshopping.data.api.Api.Method.PUT -> throw TODO("not implemented")
+            Method.GET -> return builder.get().build()
+            Method.POST -> return builder.post(okhttp3.RequestBody.create(JSON, body!!)).build()
+            Method.DELETE -> throw TODO("not implemented")
+            Method.PUT -> throw TODO("not implemented")
         }
     }
 

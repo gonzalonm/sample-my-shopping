@@ -15,12 +15,15 @@ class App : Application() {
 
     val MY_SHOPPING_PREFERENCES = "MyShopping.preferences"
     val PREF_REMEMBER_LOGIN = "pref.remember.login"
-
-    var isLogged: Boolean = false
+    val PREF_TOKEN = "pref.token"
 
     var rememberLogin: Boolean
         set(value) = updateBooleanPreference(PREF_REMEMBER_LOGIN, value)
         get() = getBooleanPref(PREF_REMEMBER_LOGIN)
+
+    var token: String
+        set(value) = updateStringPreference(PREF_TOKEN, value)
+        get() = getStringPref(PREF_TOKEN)
 
     override fun onCreate() {
         super.onCreate()
@@ -31,8 +34,16 @@ class App : Application() {
         getSP().edit().putBoolean(preferenceName, value).apply()
     }
 
+    private fun updateStringPreference(prefName: String, value: String) {
+        getSP().edit().putString(prefName, value).apply()
+    }
+
     private fun getBooleanPref(prefName: String) : Boolean {
         return getSP().getBoolean(prefName, false)
+    }
+
+    private fun getStringPref(prefName: String) : String {
+        return getSP().getString(prefName, "")
     }
 
     private fun getSP() : SharedPreferences {

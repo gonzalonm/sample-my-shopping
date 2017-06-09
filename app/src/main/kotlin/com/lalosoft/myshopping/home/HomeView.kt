@@ -7,4 +7,5 @@ interface HomeView : BaseView {
     fun render(list: List<Item>)
     fun renderEmpty()
     fun renderError()
+    fun restartApp()
 }
