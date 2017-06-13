@@ -1,9 +1,8 @@
 package com.lalosoft.myshopping.data.api
 
 import com.lalosoft.myshopping.data.toJson
-import okhttp3.MediaType
-import okhttp3.OkHttpClient
-import okhttp3.Request
+import okhttp3.*
+import java.io.IOException
 
 object Api {
 
@@ -28,12 +27,12 @@ object Api {
 
         val request = resolveMethod(url, method, body)
 
-        client.newCall(request).enqueue(object : okhttp3.Callback {
-            override fun onFailure(call: okhttp3.Call?, e: java.io.IOException?) {
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call?, e: IOException?) {
                 callback(ApiResponse<String>(false, error = e.toString()))
             }
 
-            override fun onResponse(call: okhttp3.Call?, response: okhttp3.Response?) {
+            override fun onResponse(call: Call?, response: Response?) {
                 val jsonResponse = response?.body()?.string()!!.toJson()
                 if (jsonResponse["result"] == "success") {
                     callback(ApiResponse(content = jsonResponse.toString()))
@@ -50,7 +49,7 @@ object Api {
         val builder = Request.Builder().url(url)
         when (method) {
             Method.GET -> return builder.get().build()
-            Method.POST -> return builder.post(okhttp3.RequestBody.create(JSON, body!!)).build()
+            Method.POST -> return builder.post(RequestBody.create(JSON, body!!)).build()
             Method.DELETE -> throw TODO("not implemented")
             Method.PUT -> throw TODO("not implemented")
         }
